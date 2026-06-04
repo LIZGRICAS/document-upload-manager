@@ -1,245 +1,245 @@
 # Document Upload Manager
 
-Enterprise-grade file upload system built with Next.js 14+, TypeScript, and React 18.
+Sistema enterprise para carga de archivos construido con Next.js 14+, TypeScript y React 18.
 
-## 📋 Table of Contents
+## 📋 Tabla de Contenidos
 
-- [Features](#features)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Running Tests](#running-tests)
-- [Folder Structure](#folder-structure)
-- [Decision Log](#decision-log)
+- [Características](#características)
+- [Arquitectura](#arquitectura)
+- [Stack Tecnológico](#stack-tecnológico)
+- [Inicio Rápido](#inicio-rápido)
+- [Ejecutar Pruebas](#ejecutar-pruebas)
+- [Estructura de Carpetas](#estructura-de-carpetas)
+- [Registro de Decisiones](#registro-de-decisiones)
 - [Trade-offs](#trade-offs)
-- [Accessibility](#accessibility)
+- [Accesibilidad](#accesibilidad)
 
-## ✨ Features
+## ✨ Características
 
-- **Drag & Drop Upload** - Intuitive file selection with drag & drop support
-- **Concurrent Uploads** - Configurable parallel uploads with exponential backoff retry
-- **Duplicate Detection** - Automatic detection and marking of duplicate files
-- **Progress Tracking** - Real-time upload progress with visual feedback
-- **Error Recovery** - Individual file retry capability with error details
-- **Dark Mode** - System preference detection with localStorage persistence
-- **Form Validation** - yup-based form validation with Formik
-- **Accessibility** - WCAG 2.1 AA compliant with full keyboard navigation
-- **Type Safety** - Full TypeScript with discriminated unions for type-safe state
+- **Carga Drag & Drop** - Selección intuitiva de archivos con soporte para arrastrar y soltar
+- **Cargas Concurrentes** - Cargas paralelas configurables con reintento exponencial
+- **Detección de Duplicados** - Detección automática y marcado de archivos duplicados
+- **Seguimiento de Progreso** - Progreso en tiempo real con retroalimentación visual
+- **Recuperación de Errores** - Capacidad de reintento individual por archivo con detalles de error
+- **Modo Oscuro** - Detección de preferencia del sistema con persistencia en localStorage
+- **Validación de Formularios** - Validación basada en yup con Formik
+- **Accesibilidad** - Cumple con WCAG 2.1 AA con navegación completa por teclado
+- **Seguridad de Tipos** - TypeScript completo con unions discriminadas para estado tipado seguro
 
-## 🏗️ Architecture
+## 🏗️ Arquitectura
 
-### Provider Pattern
+### Patrón Provider
 
 ```
 UploadManager (Hook)
     ↓
-UploadContext (State)
+UploadContext (Estado)
     ↓
-UploadService (Business Logic)
+UploadService (Lógica de Negocio)
     ↓
 IUploadProvider (Interface)
     ↓
-XHRUploadProvider (Implementation)
+XHRUploadProvider (Implementación)
 ```
 
-### State Management
+### Gestión de Estado
 
-- **Context + useReducer**: Single source of truth for upload jobs
-- **Discriminated Unions**: Type-safe state transitions for `UploadJob`
-- **useMemo**: Derived state for computed counts (pending, completed, failed)
+- **Context + useReducer**: Única fuente de verdad para los trabajos de carga
+- **Unions Discriminadas**: Transiciones de estado seguras con tipo para `UploadJob`
+- **useMemo**: Estado derivado para conteos calculados (pendiente, completado, fallido)
 
-### Concurrency Control
+### Control de Concurrencia
 
-- **useUploadQueue**: Manages upload pool with configurable max concurrent
-- **Exponential Backoff**: Retry strategy with jitter to prevent thundering herd
-- **limitConcurrency**: Utility to execute tasks with concurrency limit
+- **useUploadQueue**: Maneja el grupo de carga con máximo paralelo configurable
+- **Retroceso Exponencial**: Estrategia de reintento con jitter para prevenir thundering herd
+- **limitConcurrency**: Utilidad para ejecutar tareas con límite de concurrencia
 
-## 🛠️ Tech Stack
+## 🛠️ Stack Tecnológico
 
-| Category | Technology |
+| Categoría | Tecnología |
 |----------|-----------|
 | Framework | Next.js 14.2.5 (App Router) |
-| Language | TypeScript 5.5+ (strict mode) |
+| Lenguaje | TypeScript 5.5+ (modo estricto) |
 | UI Library | React 18.3+ |
-| State | Context + useReducer |
-| Forms | Formik + Yup |
-| Styling | Tailwind CSS 4 |
-| Testing | Jest + React Testing Library |
+| Estado | Context + useReducer |
+| Formularios | Formik + Yup |
+| Estilos | Tailwind CSS 4 |
+| Pruebas | Jest + React Testing Library |
 | Linting | ESLint + Next.js |
 
-## 🚀 Getting Started
+## 🚀 Inicio Rápido
 
-### Prerequisites
+### Requisitos Previos
 
 - Node.js 18+ 
-- npm or yarn
+- npm o yarn
 
-### Installation
+### Instalación
 
 ```bash
-# Clone the repository
+# Clonar el repositorio
 git clone <repo-url>
 cd document-upload-manager
 
-# Install dependencies
+# Instalar dependencias
 npm install
 ```
 
-### Development
+### Desarrollo
 
 ```bash
-# Start dev server
+# Iniciar servidor de desarrollo
 npm run dev
 
-# Open in browser
+# Abrir en navegador
 http://localhost:3000
 ```
 
-### Build for Production
+### Construcción para Producción
 
 ```bash
 npm run build
 npm start
 ```
 
-## 🧪 Running Tests
+## 🧪 Ejecutar Pruebas
 
 ```bash
-# Run all tests
+# Ejecutar todas las pruebas
 npm test
 
-# Run with coverage
+# Ejecutar con cobertura
 npm run test:coverage
 
-# Run in watch mode
+# Ejecutar en modo watch
 npm run test:watch
 ```
 
-## 📁 Folder Structure
+## 📁 Estructura de Carpetas
 
 ```
 src/
 ├── app/                           # Next.js App Router
-│   ├── api/                       # API routes
-│   │   ├── upload/               # Mock upload endpoint
-│   │   └── submit/               # Mock submit endpoint
-│   ├── layout.tsx                # Root layout with Skip Link
-│   ├── globals.css               # Global styles with Tailwind
-│   └── page.tsx                  # Main application page
+│   ├── api/                       # Rutas API
+│   │   ├── upload/               # Endpoint de carga simulado
+│   │   └── submit/               # Endpoint de envío simulado
+│   ├── layout.tsx                # Layout raíz con Skip Link
+│   ├── globals.css               # Estilos globales con Tailwind
+│   └── page.tsx                  # Página principal de la aplicación
 ├── features/
-│   └── upload/                   # File upload feature
-│       ├── types/               # Domain types (discriminated unions)
+│   └── upload/                   # Función de carga de archivos
+│       ├── types/               # Tipos de dominio (unions discriminadas)
 │       │   ├── upload.types.ts
 │       │   ├── upload.constants.ts
 │       │   └── upload.error.ts
-│       ├── config/              # Configuration
+│       ├── config/              # Configuración
 │       │   ├── upload.ts
 │       │   └── index.ts
-│       ├── domain/              # Business logic
+│       ├── domain/              # Lógica de negocio
 │       │   ├── upload.utils.ts
 │       │   └── index.ts
-│       ├── services/            # Service layer
+│       ├── services/            # Capa de servicios
 │       │   ├── upload.service.ts
 │       │   ├── upload.provider.ts
 │       │   ├── backoff.ts
 │       │   └── providers/
 │       │       └── xhr.upload.provider.ts
-│       ├── store/               # State management
+│       ├── store/               # Gestión de estado
 │       │   ├── upload.reducer.ts
 │       │   ├── upload.context.tsx
 │       │   ├── upload.actions.ts
 │       │   ├── upload.selectors.ts
 │       │   └── index.ts
-│       ├── hooks/               # Custom React hooks
+│       ├── hooks/               # Custom hooks de React
 │       │   ├── useUploadManager.ts
 │       │   ├── useUploadQueue.ts
 │       │   └── useDarkMode.ts
-│       ├── components/          # UI components
+│       ├── components/          # Componentes UI
 │       │   ├── Dropzone.tsx
 │       │   ├── FilesTable.tsx
 │       │   ├── UploadForm.tsx
 │       │   ├── FileRow.tsx
 │       │   └── ...
 │       └── index.ts
-├── lib/                         # Shared utilities
+├── lib/                         # Utilidades compartidas
 │   ├── concurrency.ts
 │   └── index.ts
-└── __tests__/                   # Test files
+└── __tests__/                   # Archivos de prueba
     ├── store/
     ├── hooks/
     └── ...
 ```
 
-## 📝 Decision Log
+## 📝 Registro de Decisiones
 
-### Why Discriminated Unions?
+### ¿Por qué Unions Discriminadas?
 
-TypeScript discriminated unions provide compile-time safety for state transitions:
+Las unions discriminadas de TypeScript proporcionan seguridad en tiempo de compilación para las transiciones de estado:
 
 ```typescript
-// Compile error if missing required property
+// Error de compilación si falta la propiedad requerida
 const job: IdleUploadJob = {
   id: '1',
   status: 'idle',
-  // Error: Property 'progress' does not exist
+  // Error: La propiedad 'progress' no existe
   progress: 50,
 }
 ```
 
-### Why Context + useReducer?
+### ¿Por qué Context + useReducer?
 
-- **Single Source of Truth**: All upload state in one place
-- **Predictable Updates**: Reducer pattern for state transitions
-- **Easy Testing**: Reducer is pure function, easy to test
-- **Context**: No prop drilling for deeply nested components
+- **Única Fuente de Verdad**: Todo el estado de carga en un solo lugar
+- **Actualizaciones Predecibles**: Patrón reducer para transiciones de estado
+- **Fácil de Probar**: El reducer es una función pura, fácil de probar
+- **Context**: Sin prop drilling para componentes anidados profundamente
 
-### Why XHR instead of Fetch?
+### ¿Por qué XHR en lugar de Fetch?
 
-- **Progress Events**: `xhr.upload.onprogress` for real-time progress
-- **AbortSignal**: Native cancellation support
-- **Browser Support**: Universal support across browsers
+- **Eventos de Progreso**: `xhr.upload.onprogress` para progreso en tiempo real
+- **AbortSignal**: Soporte nativo de cancelación
+- **Soporte de Navegador**: Soporte universal en navegadores
 
-### Why Formik + Yup?
+### ¿Por qué Formik + Yup?
 
-- **Formik**: Reduces boilerplate for complex forms
-- **Yup**: Declarative validation schema
-- **Integration**: Seamless with React components
+- **Formik**: Reduce el boilerplate para formularios complejos
+- **Yup**: Schema de validación declarativa
+- **Integración**: Simplemente con componentes de React
 
 ## ⚖️ Trade-offs
 
-| Decision | Rationale |
+| Decisión | Razonamiento |
 |----------|-----------|
-| **Next.js SSR disabled** | File handling requires client-side APIs (File, FileReader) |
-| **No TypeScript strict null checks** | Compatibility with discriminated unions |
-| **useEffect for state sync** | Simpler than custom store implementations |
-| **Local state for UI** | Performance - no need to sync to global state |
-| **Mock API** | Focus on upload logic, not backend integration |
+| **SSR de Next.js deshabilitado** | El manejo de archivos requiere APIs del lado del cliente (File, FileReader) |
+| **Sin comprobaciones estrictas de nulos en TypeScript** | Compatibilidad con unions discriminadas |
+| **useEffect para sincronización de estado** | Más simple que implementaciones de store personalizadas |
+| **Estado local para UI** | Rendimiento - no es necesario sincronizar con estado global |
+| **API simulada** | Enfocarse en la lógica de carga, no en la integración con backend |
 
-## ♿ Accessibility
+## ♿ Accesibilidad
 
-### Implemented Features
+### Características Implementadas
 
-- **Skip Link**: First focusable element to main content
-- **Table Caption**: Descriptive table with `<caption>` element
-- **Column Headers**: `scope="col"` on header cells
-- **ARIA Live**: Status changes announced via `aria-live`
-- **Keyboard Navigation**: Full Tab support, Enter/Space activation
-- **Color Contrast**: ≥ 4.5:1 ratio per WCAG AA
-- **Dark Mode**: System preference detection with `prefers-color-scheme`
+- **Skip Link**: Primer elemento enfocable al contenido principal
+- **Caption de Tabla**: Tabla descriptiva con elemento `<caption>`
+- **Encabezados de Columna**: `scope="col"` en celdas de encabezado
+- **ARIA Live**: Cambios de estado anunciados vía `aria-live`
+- **Navegación por Teclado**: Soporte completo de Tab, Enter/Space para activación
+- **Contraste de Color**: ≥ 4.5:1 ratio según WCAG AA
+- **Modo Oscuro**: Detección de preferencia del sistema con `prefers-color-scheme`
 
-### Validated
+### Validado
 
-- WCAG 2.1 AA compliant
-- Lighthouse accessibility score: 100
-- Keyboard-only navigation tested
+- Cumple con WCAG 2.1 AA
+- Puntuación de accesibilidad Lighthouse: 100
+- Navegación con teclado solamente probada
 
-## 📚 Additional Resources
+## 📚 Recursos Adicionales
 
-- [Next.js Documentation](https://nextjs.org/docs)
+- [Documentación de Next.js](https://nextjs.org/docs)
 - [React Hooks](https://react.dev/reference/react)
-- [TypeScript Discriminated Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions)
+- [Unions Discriminadas de TypeScript](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions)
 - [Tailwind CSS](https://tailwindcss.com/docs)
 
-## 📄 License
+## 📄 Licencia
 
 MIT
