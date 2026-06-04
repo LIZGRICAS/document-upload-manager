@@ -2,22 +2,19 @@
  * ThemeToggle Component
  * 
  * Dark mode toggle button with ARIA attributes
+ * Uses useTheme hook for state management
  */
 
 import React from 'react'
+import { useTheme } from '../theme'
 
-type Theme = 'light' | 'dark'
+export const ThemeToggle: React.FC = () => {
+  const { theme, toggleTheme } = useTheme()
 
-interface ThemeToggleProps {
-  theme: Theme
-  onToggle: () => void
-}
-
-export const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle }) => {
   return (
     <button
       type="button"
-      onClick={onToggle}
+      onClick={toggleTheme}
       role="switch"
       aria-checked={theme === 'dark'}
       aria-label={`Cambiar a modo ${theme === 'dark' ? 'claro' : 'oscuro'}`}

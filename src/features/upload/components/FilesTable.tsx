@@ -1,83 +1,65 @@
 /**
  * FilesTable Component
- *
- * Columns: Options | Name | Mime Type | Tags* | Created At | Created By
- * Empty state: folder+magnifier icon, "No files uploaded"
+ * 
+ * Enterprise-style table for displaying uploaded files
+ * Columns: Actions | Name | MIME Type | Status | Progress | Created At | Created By
  */
 
 import React from 'react'
 import type { UploadJob } from '../types/upload.types'
+import { useUploadContext } from '../store'
 import { FileRow } from './FileRow'
+import { formatTimestamp } from '../domain'
 
 interface FilesTableProps {
   jobs: UploadJob[]
   maxConcurrent: number
-  onRemove: (id: string) => void
-  onRetry: (id: string) => void
-  onCancel: (id: string) => void
 }
 
-export const FilesTable: React.FC<FilesTableProps> = ({
-  jobs,
-  maxConcurrent,
-  onRemove,
-  onRetry,
-  onCancel,
-}) => {
-  // Show all non-duplicate files
+export const FilesTable: React.FC<FilesTableProps> = ({ jobs, maxConcurrent }) => {
+  const { removeFile, startUpload, cancelUpload, retryUpload, clearFiles } = useUploadContext()
+
+  // Filter out duplicates for display (but keep them in state)
   const displayJobs = jobs.filter((job) => !job.isDuplicate)
 
   return (
     <div className="w-full overflow-x-auto">
-      <table
-        className="w-full text-sm border-collapse"
-        role="table"
-        aria-label="Lista de archivos subidos"
-      >
-        <thead>
-          <tr className="border-b border-gray-200">
-            <th scope="col" className="px-4 py-2 text-left text-sm font-semibold text-gray-700 w-16">
-              Options
+      <table className="w-full caption-bottom" role="table" aria-label="Lista de archivos subidos">
+        <caption className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          Lista de archivos subidos. Acciones disponibles: cancelar, reintentar, eliminar.
+        </caption>
+        
+        <thead className="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Acciones
             </th>
-            <th scope="col" className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-              Name
+            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Nombre
             </th>
-            <th scope="col" className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-              Mime Type
+            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Tipo MIME
             </th>
-            <th scope="col" className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-              Tags <span className="text-red-500">*</span>
+            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Estado
             </th>
-            <th scope="col" className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-              Created At
+            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Progreso
             </th>
-            <th scope="col" className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
-              Created By
+            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Creado El
+            </th>
+            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Creado Por
             </th>
           </tr>
         </thead>
-
-        <tbody>
+        
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-700" role="rowgroup">
           {displayJobs.length === 0 ? (
             <tr>
-              <td colSpan={6} className="py-10 text-center">
-                <div className="flex flex-col items-center gap-2">
-                  {/* Folder + magnifier icon in yellow */}
-                  <svg
-                    className="w-14 h-14"
-                    viewBox="0 0 64 64"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M56 14H32l-4-6H8a4 4 0 00-4 4v36a4 4 0 004 4h48a4 4 0 004-4V18a4 4 0 00-4-4z"
-                      fill="#FBBF24"
-                    />
-                    <circle cx="36" cy="34" r="8" fill="white" opacity="0.85" />
-                    <circle cx="36" cy="34" r="6" fill="none" stroke="#D97706" strokeWidth="2" />
-                    <line x1="40.5" y1="38.5" x2="46" y2="44" stroke="#D97706" strokeWidth="2.5" strokeLinecap="round" />
-                  </svg>
-                  <span className="text-sm text-gray-500">No files uploaded</span>
-                </div>
+              <td colSpan={7} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                No hay archivos. Arrastra archivos aquí para comenzar.
               </td>
             </tr>
           ) : (
@@ -85,14 +67,27 @@ export const FilesTable: React.FC<FilesTableProps> = ({
               <FileRow
                 key={job.id}
                 job={job}
-                onRemove={onRemove}
-                onRetry={onRetry}
-                onCancel={onCancel}
+                onRemove={removeFile}
+                onStart={startUpload}
+                onCancel={cancelUpload}
+                onRetry={retryUpload}
               />
             ))
           )}
         </tbody>
       </table>
+
+      {/* Clear all button */}
+      {jobs.length > 0 && (
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={clearFiles}
+            className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+          >
+            Limpiar todo
+          </button>
+        </div>
+      )}
     </div>
   )
 }

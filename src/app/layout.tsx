@@ -8,6 +8,7 @@
  */
 
 import React from 'react'
+import { ThemeProvider } from '../features/theme'
 import './globals.css'
 
 export const metadata = {
@@ -23,15 +24,17 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        {/* Skip Link for WCAG AA compliance */}
-        <a
-          href="#main-content"
-          className="fixed top-2 left-2 z-50 bg-blue-600 text-white px-4 py-2 rounded shadow-lg transition-transform duration-200 hover:scale-105 focus:transform focus:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-        >
-          Saltar al contenido
-        </a>
-        
-        {children}
+        <ThemeProvider>
+          {/* Skip Link for WCAG AA compliance */}
+          <a
+            href="#main-content"
+            className="fixed top-2 left-2 z-50 bg-blue-600 text-white px-4 py-2 rounded shadow-lg transition-transform duration-200 hover:scale-105 focus:transform focus:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          >
+            Saltar al contenido
+          </a>
+          
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
