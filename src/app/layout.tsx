@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" className="dark">
+    <html lang="es">
       <body>
         {/* Skip Link for WCAG AA compliance */}
         <a
