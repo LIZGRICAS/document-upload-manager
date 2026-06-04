@@ -1,7 +1,8 @@
 /**
  * Global Styles
  * 
- * Tailwind CSS configuration
+ * CSS Variables for theming
+ * Theme is controlled by ThemeProvider which manages .dark class on <html>
  */
 
 @tailwind base;
@@ -9,34 +10,30 @@
 @tailwind utilities;
 
 :root {
+  --background: #ffffff;
+  --foreground: #171717;
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
+  background: var(--background);
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-}
-
-/* Dark mode classes */
-.dark {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 0, 0, 0;
-  --background-end-rgb: 0, 0, 0;
 }
 
 /* Utility classes */

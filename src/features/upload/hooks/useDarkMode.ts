@@ -1,24 +1,25 @@
 /**
- * Dark Mode Hook (Deprecated)
+ * useDarkMode Hook (Deprecated - Legacy wrapper)
  * 
- * This hook is deprecated and will be removed in a future version.
- * Use useTheme from '@features/theme' instead.
+ * THIS HOOK IS DEPRECATED AND WILL BE REMOVED IN A FUTURE RELEASE.
+ * It now wraps useTheme() from the ThemeContext for backward compatibility.
  * 
- * Kept for backwards compatibility during migration.
+ * For new components, use useTheme() from:
+ * import { useTheme } from '../theme/theme.context'
+ * 
+ * @deprecated Use useTheme() instead
  */
 
-import { useTheme } from '../theme'
+import { useTheme } from '../theme/theme.context'
+import type { Theme } from '../theme/theme.context'
 
-// Re-export useTheme with deprecated warnings
-export const useDarkMode = () => {
-  console.warn(
-    '[DEPRECATED] useDarkMode is deprecated. Use useTheme from @features/theme instead.'
-  )
-  return {
-    theme: useTheme().theme,
-    toggleTheme: useTheme().toggleTheme,
-    setTheme: useTheme().setTheme,
-  }
+export const useDarkMode = (): {
+  theme: Theme
+  toggleTheme: () => void
+  setTheme: (theme: Theme) => void
+} => {
+  const { theme, toggleTheme, setTheme } = useTheme()
+  return { theme, toggleTheme, setTheme }
 }
 
 export default useDarkMode

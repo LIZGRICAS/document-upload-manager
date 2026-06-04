@@ -8,15 +8,13 @@
 'use client'
 
 import React from 'react'
-import { UploadProvider } from '../features/upload'
 import { UploadForm } from '../features/upload/components/UploadForm'
 import { FilesTable } from '../features/upload/components/FilesTable'
 import { ThemeToggle } from '../features/upload/components/ThemeToggle'
 
 export default function HomePage() {
   return (
-    <UploadProvider>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
         {/* Header with dark mode toggle */}
         <header className="bg-white dark:bg-gray-800 shadow-sm transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -41,6 +39,5 @@ export default function HomePage() {
           </div>
         </footer>
       </div>
-    </UploadProvider>
   )
 }

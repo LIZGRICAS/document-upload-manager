@@ -26,6 +26,7 @@ export * from './services/upload.service'
 export * from './store/upload.context'
 export * from './store/upload.actions'
 export * from './store/upload.selectors'
+export { UploadClientWrapper } from './upload-wrapper.client'
 
 // Hooks
 export * from './hooks/useUploadManager'
@@ -41,6 +42,9 @@ export * from './components/UploadForm'
 export * from './components/useDropZone'
 
 // Theme
+export * from './theme/theme.context'
+export { ThemeProvider } from './theme/theme.context'
+export { ThemeClientWrapper } from './theme/theme-provider.client'
 export * from './components/ThemeToggle'
 
 // Feature exports
